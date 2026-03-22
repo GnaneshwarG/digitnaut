@@ -1,0 +1,32 @@
+name: Update Blogger Sitemap
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight
+  workflow_dispatch: # Allows you to run it manually
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/preferred-python-version@v1
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install feedparser
+
+      - name: Run sitemap script
+        run: python update_sitemap.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'Gnaneshwar Gaddam'
+          git config --global user.email 'gnaneshwargaddam@gmail.com'
+          git add sitemap.xml
+          git commit -m "Auto-update sitemap from Blogger feed" || exit 0
+          git push
