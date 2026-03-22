@@ -1,9 +1,9 @@
-name: Update Blogger Sitemap
+name: Update Digitnaut Sitemap
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs every day at midnight
-  workflow_dispatch: # Allows you to run it manually
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/preferred-python-version@v1
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
@@ -21,12 +21,12 @@ jobs:
         run: pip install feedparser
 
       - name: Run sitemap script
-        run: python update_sitemap.py
+        run: python sitemap.py
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'Gnaneshwar Gaddam'
           git config --global user.email 'gnaneshwargaddam@gmail.com'
-          git add sitemap.xml
-          git commit -m "Auto-update sitemap from Blogger feed" || exit 0
+          git add .
+          git commit -m "Automated update for sitemap and index" || exit 0
           git push
